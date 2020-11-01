@@ -1,6 +1,12 @@
 
 $fn=50;
 
+use <mounting_plate.scad>;
+use <dovetail.scad>;
+use <clip.scad>;
+
+
+
 // Depth to the ski slot
 ski_slot_depth = 130;
 
@@ -31,9 +37,6 @@ pole_holder_tickness=4;
 
 chamf_diam=6;
 
-
-use <mounting_plate.scad>;
-use <dovetail.scad>;
 
 
 module base_plate()
@@ -103,27 +106,14 @@ module finger()
                     chanfin(chamf_diam, finger_width, 90);
         }
     
-        // Two teeth slots
-        translate([tickness/4, holder_depth, tickness/4])
-            rotate([90, 0, 0])
-                minkowski() 
-                {
-                    tooth(teeth_width, tickness/2, teeth_depth, 1);
-                    sphere(r=0.2, $fn=20);
-                }
+        // Two Clip slots
+        translate([4, holder_depth, 3*tickness/4])
+            rotate([180, 0,-90])
+                clip_pocket(3, 15, tickness/2, 1, 5);
 
         translate([finger_width-tickness/4-teeth_width, holder_depth, tickness/4])
-            rotate([90, 0, 0])
-                minkowski() 
-                {
-                    tooth(teeth_width, tickness/2, teeth_depth, 1);
-                    sphere(r=0.2, $fn=20);
-                }
-
-        // Screw hole
-        translate([finger_width/2, holder_depth+0.1, tickness/2])
-            rotate([90])
-                cylinder(d=3, h=20);
+            rotate([0, 0,-90])
+                clip_pocket(3, 15, tickness/2, 1, 5);
     }       
 }
 
@@ -148,24 +138,16 @@ module pole_holder()
         translate([-(pole_diam+2*pole_holder_tickness)/2, (pole_diam+2*pole_holder_tickness)/2+5,-1])
             cube([pole_diam+2*pole_holder_tickness, pole_diam+2*pole_holder_tickness, tickness+2]);
 
-        // Screw hole
-        translate([finger_width/2, -0.1, tickness/2])
-            rotate([-90])
-                cylinder(d=3.2, h=20);
-
-        translate([finger_width/2,   2, tickness/2])
-            rotate([-90])
-                cylinder(d=5.8, h=20);
+ 
         
     }
 
-    translate([tickness/4, 0, tickness/4])
-        rotate([90, 0, 0])
-            tooth(teeth_width, tickness/2, teeth_depth, 1);
-
+    translate([4, 0, 3/4*tickness])
+        rotate([180, 0,-90])
+            clip(3, 15, tickness/2, 1, 5);
     translate([finger_width-tickness/4- teeth_width, 0, tickness/4])
-        rotate([90, 0, 0])
-            tooth(teeth_width, tickness/2, teeth_depth, 1);
+        rotate([0, 0,-90])
+            clip(3, 15, tickness/2, 1, 5);
  
 }
 
@@ -223,12 +205,20 @@ module half_holder()
 
 // Right ski-holder
 
-half_holder();
-translate([0, holder_depth+15,  0])
-    pole_holder();
+*half_holder();
+
+translate([0, -holder_depth, 0]) {
+    *difference() {
+        finger();
+        translate([-50, 0, -50])
+            cube(size=[100, 110, 100], center=false);
+    }
+    translate([0, holder_depth+15,  0])
+        pole_holder();
+}
 
 // Left ski-holder
-translate([60,0,0])
+*translate([60,0,0])
     mirror([1, 0, 0])
     {
         half_holder();
