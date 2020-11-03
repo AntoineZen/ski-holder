@@ -203,28 +203,50 @@ module half_holder()
 }
 
 
-// Right ski-holder
+plater = flase;
 
-*half_holder();
+if(plater) {
 
-translate([0, -holder_depth, 0]) {
-    *difference() {
-        finger();
-        translate([-50, 0, -50])
-            cube(size=[100, 110, 100], center=false);
-    }
-    translate([0, holder_depth+15,  0])
+    translate([0, 0, finger_width])
+    rotate([0, 90, 0])
+    half_holder();
+
+    translate([-60, 60,  0])
         pole_holder();
-}
 
-// Left ski-holder
-*translate([60,0,0])
+
+    // Left ski-holder
+    translate([-100, 150, finger_width])
+    rotate([0, -90, -90])
+        mirror([1, 0, 0])
+        {
+            half_holder();
+
+        }
+
+    translate([-30, 100,  0])
     mirror([1, 0, 0])
     {
-        half_holder();
-        translate([0, holder_depth,  0])
             pole_holder();
     }
+
+}
+else {
+    // Right ski-holder
+    half_holder();
+    translate([0, holder_depth+20,  0])
+        pole_holder();
+
+
+    // Left ski-holder
+    translate([60,0,0])
+        mirror([1, 0, 0])
+        {
+            half_holder();
+            translate([0, holder_depth,  0])
+                pole_holder();
+        }
+}
 
 
 
