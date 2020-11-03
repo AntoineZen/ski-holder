@@ -3,7 +3,7 @@
 module clip(
 	width, length, tickness, 
 	teeth_height, teeth_length, 
-	backlash=0.1, vbacklash=0.4
+	backlash=0.1, vbacklash=0.2
 ) 
 {
 	bl = backlash / 2;
@@ -35,7 +35,7 @@ module clip(
 module clip_pocket(
 	width, length, tickness, 
 	teeth_height, teeth_length,
-	backlash=0.1, vbacklash=0.4
+	backlash=0.1, vbacklash=0.2
 )  {
 
 	bl = backlash / 2;
